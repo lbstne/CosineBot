@@ -54,6 +54,11 @@ async def on_message(message):
         await message.channel.typing()
         formatted_message = re.sub('\\[\\[.*\\]\\]', url_to_text, message.content)
 
+        # erase the message history provided to the GPT4 model
+        if message.content.contains("{{CLEAR HISTORY}}"):
+            print(f"Clearing history for {message.author.id}")
+            del user_message_histories[message.author.id]
+
         # change system prompt at will
         if str(message.author.id) in admins and message.content.contains("{{ADMIN OVERRIDE}}"):
             print("ADMIN OVERRIDE")
